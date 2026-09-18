@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "Study Room Booking API",
+    "description": "Assignment 4 - CRUD for Student, StudyRoom and Booking, plus business-rule negative tests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8081" }
+  ],
+  "item": [
+    {
+      "name": "Students",
+      "item": [
+        { "name": "Get all students", "request": { "method": "GET", "url": "{{baseUrl}}/api/students" } },
+        { "name": "Get student by id", "request": { "method": "GET", "url": "{{baseUrl}}/api/students/1" } },
+        {
+          "name": "Create student",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/students",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"David Habimana\",\n  \"email\": \"david.h@example.com\",\n  \"studentNumber\": \"23004\",\n  \"phone\": \"0788000004\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update student",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/students/4",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"David Habimana\",\n  \"email\": \"david.habimana@example.com\",\n  \"studentNumber\": \"23004\",\n  \"phone\": \"0788000099\"\n}"
+            }
+          }
+        },
+        { "name": "Delete student", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/students/4" } }
+      ]
+    },
+    {
+      "name": "Study Rooms",
+      "item": [
+        { "name": "Get all rooms", "request": { "method": "GET", "url": "{{baseUrl}}/api/study-rooms" } },
+        { "name": "Get room by id", "request": { "method": "GET", "url": "{{baseUrl}}/api/study-rooms/1" } },
+        {
+          "name": "Create room",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/study-rooms",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"C303\",\n  \"building\": \"Engineering Block\",\n  \"floor\": 3,\n  \"capacity\": 8,\n  \"hasProjector\": true,\n  \"hasWhiteboard\": false,\n  \"status\": \"AVAILABLE\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create room - invalid format (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/study-rooms",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"office1\",\n  \"building\": \"X\",\n  \"floor\": 1,\n  \"capacity\": 5,\n  \"status\": \"AVAILABLE\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update room",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/study-rooms/4",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"C303\",\n  \"building\": \"Engineering Block\",\n  \"floor\": 3,\n  \"capacity\": 12,\n  \"hasProjector\": true,\n  \"hasWhiteboard\": true,\n  \"status\": \"AVAILABLE\"\n}"
+            }
+          }
+        },
+        { "name": "Delete room", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/study-rooms/4" } }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        { "name": "Get all bookings", "request": { "method": "GET", "url": "{{baseUrl}}/api/bookings" } },
+        { "name": "Get booking by id", "request": { "method": "GET", "url": "{{baseUrl}}/api/bookings/1" } },
+        {
+          "name": "Create booking (valid)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/bookings",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"roomId\": 1,\n  \"bookingDate\": \"2026-09-25\",\n  \"startTime\": \"10:00:00\",\n  \"endTime\": \"11:00:00\",\n  \"purpose\": \"Group study session\",\n  \"status\": \"CONFIRMED\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create booking - overlapping (expect 409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/bookings",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 2,\n  \"roomId\": 1,\n  \"bookingDate\": \"2026-09-25\",\n  \"startTime\": \"10:30:00\",\n  \"endTime\": \"11:30:00\",\n  \"purpose\": \"Overlap test\",\n  \"status\": \"PENDING\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create booking - room under maintenance (expect 409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/bookings",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 2,\n  \"roomId\": 3,\n  \"bookingDate\": \"2026-09-25\",\n  \"startTime\": \"09:00:00\",\n  \"endTime\": \"10:00:00\",\n  \"purpose\": \"Maintenance room test\",\n  \"status\": \"PENDING\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create booking - end before start (expect 409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/bookings",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 2,\n  \"roomId\": 2,\n  \"bookingDate\": \"2026-09-25\",\n  \"startTime\": \"12:00:00\",\n  \"endTime\": \"09:00:00\",\n  \"purpose\": \"Bad time range\",\n  \"status\": \"PENDING\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create booking - missing purpose (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/bookings",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 2,\n  \"roomId\": 2,\n  \"bookingDate\": \"2026-09-25\",\n  \"startTime\": \"09:00:00\",\n  \"endTime\": \"10:00:00\",\n  \"status\": \"PENDING\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update booking",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/bookings/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"roomId\": 1,\n  \"bookingDate\": \"2026-09-26\",\n  \"startTime\": \"10:00:00\",\n  \"endTime\": \"11:00:00\",\n  \"purpose\": \"Group study session (rescheduled)\",\n  \"status\": \"CONFIRMED\"\n}"
+            }
+          }
+        },
+        { "name": "Delete booking", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/bookings/1" } }
+      ]
+    }
+  ]
+}
