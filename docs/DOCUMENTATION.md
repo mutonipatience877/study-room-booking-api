@@ -2,7 +2,7 @@
 
 **Assignment 4 — Project Phase 2**
 **Student:** MUTONI Patience
-**Repository:https://github.com/mutonipatience877
+**Repository:** https://github.com/mutonipatience877/study-room-booking-api
 **Video walkthrough:** _add your Google Vid share link here_
 
 This phase re-implements the Study Room Booking System as a **Spring Boot
@@ -108,7 +108,7 @@ into Postman):
 
 ## 6. GitHub Repository
 
-Public link: **_add after pushing — see README.md Step 7_**
+Public link: https://github.com/mutonipatience877/study-room-booking-api
 
 ## 7. Video Walkthrough
 
